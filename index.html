@@ -68,8 +68,12 @@
             <input type="text" id="cell_value" v-model="selected.value">
         </div>
         <div>
+            <label for="">rotate</label>
+            <input type="text"  v-model="selected.text_rotate">
+        </div>
+        <div>
             <label for="">background_color</label>
-            <input type="color" id="cell_value" v-model="selected.background_color">
+            <input type="color"  v-model="selected.background_color">
         </div>
         <div>
             <button @click="add_row">add row</button>
