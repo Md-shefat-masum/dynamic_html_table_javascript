@@ -74,23 +74,27 @@
         </div>
         <div>
             <label for="">rotate</label>
-            <input type="checkbox"  v-model="selected.text_rotate">
+            <input type="checkbox" v-model="selected.text_rotate">
         </div>
         <div>
             <label for="">background_color</label>
-            <input type="color"  v-model="selected.background_color">
+            <input type="color" v-model="selected.background_color">
         </div>
         <div>
             <label for="">rotate deg</label>
-            <input type="number"  v-model="selected.rotate">
+            <input type="number" v-model="selected.rotate">
         </div>
         <div>
             <label for="">top</label>
-            <input type="number"  v-model="selected.top">
+            <input type="number" v-model="selected.top">
         </div>
         <div>
             <label for="">left</label>
-            <input type="number"  v-model="selected.left">
+            <input type="number" v-model="selected.left">
+        </div>
+        <div>
+            <label for="">font_size</label>
+            <input type="number" v-model="selected.font_size">
         </div>
         <div>
             <button @click="add_row">add row</button>
@@ -106,10 +110,9 @@
                 <td>{{ index + 1 }}</td>
                 <template v-for="(col, cl_index) in row">
                     <td v-if="!col.ishide" :key="cl_index" :rowspan="col.rowspan || 1" :colspan="col.colspan || 1">
-                        <div @click="select(col)" 
-                            :style="`background-color: ${col.background_color}; transform: rotate(${col.rotate}deg);top: ${col.top}px;left: ${col.left}px;`" 
-                            class="table_cell"
-                            :class="{active: col.isselected, text_rotate: col.text_rotate}">
+                        <div @click="select(col)"
+                            :style="`background-color: ${col.background_color}; transform: rotate(${col.rotate}deg);top: ${col.top}px;left: ${col.left}px; font-size: ${col.font_size}px;`"
+                            class="table_cell" :class="{active: col.isselected, text_rotate: col.text_rotate}">
                             {{col.value}}
                         </div>
                     </td>
