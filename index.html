@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dynamic table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            min-width: 50%;
+            margin: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            text-align: center;
+        }
+
+        td div {
+            cursor: pointer;
+            padding: 10px;
+            text-wrap: nowrap;
+        }
+
+        .text_rotate {
+            writing-mode: tb-rl;
+            transform: rotate(180deg) translateX(0px);
+            transform-origin: center;
+        }
+
+        .active {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="dtable">
+        <div>
+            selected: {{ selected }}
+        </div>
+        <div>
+            <label for="">rows</label>
+            <input type="number" v-model="row">
+        </div>
+        <div>
+            <label for="">col</label>
+            <input type="number" v-model="col">
+        </div>
+        <div>
+            <label for="">colspan</label>
+            <input type="number" v-model="selected.colspan">
+        </div>
+        <div>
+            <label for="">rowspan</label>
+            <input type="number" v-model="selected.rowspan">
+        </div>
+        <div>
+            <label for="">value</label>
+            <input type="text" id="cell_value" v-model="selected.value">
+        </div>
+        <div>
+            <label for="">background_color</label>
+            <input type="color" id="cell_value" v-model="selected.background_color">
+        </div>
+        <div>
+            <button @click="add_row">add row</button>
+            <button @click="add_cols">add col</button>
+        </div>
+        <table>
+            <tr>
+                <td v-for="c in matrix[0].length+1">
+                    <div>{{ c }}</div>
+                </td>
+            </tr>
+            <tr v-for="(row, index) in matrix" :key="index">
+                <td>{{ index + 1 }}</td>
+                <template v-for="(col, cl_index) in row">
+                    <td v-if="!col.ishide" :key="cl_index" :rowspan="col.rowspan || 1" :colspan="col.colspan || 1">
+                        <div @click="select(col)" :style="`background-color: ${col.background_color}`" 
+                            class="table_cell"
+                            :class="{active: col.isselected, text_rotate: col.text_rotate}">
+                            {{col.value}}
+                        </div>
+                    </td>
+                </template>
+            </tr>
+        </table>
+        <br>
+        <table>
+            <tr v-for="(trow, trow_index) in matrix" :key="trow_index">
+                <template v-for="(tcol, cl_index) in trow">
+                    <td :key="cl_index">
+                        <div :style="`background-color: ${tcol.background_color}`">
+                            {{tcol.value || ''}}
+                            <br>
+                            <button @click="unhide(trow_index, cl_index)" v-if="tcol.ishide"
+                                type="button">unhide</button>
+                        </div>
+                    </td>
+                </template>
+            </tr>
+        </table>
+    </div>
+
+    <div id="matrix"></div>
+    <script src="./vue.js"></script>
+    <script src="./app.js"></script>
+</body>
+
+</html>
