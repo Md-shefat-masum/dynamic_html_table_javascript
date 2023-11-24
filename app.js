@@ -77,6 +77,8 @@ new Vue({
             border: '',
             text_rotate: 0,
             rotate: 0,
+            top: 0,
+            left: 0,
         },
     }),
     created: function () {
@@ -109,9 +111,13 @@ new Vue({
                 this.matrix.push(Array.from(row_data));
             }
         },
+        reset: function () {
+            this.matrix = [];
+            this.make_table();
+        },
         select: function (item) {
             this.selected.isselected = false;
-            [...document.querySelectorAll('.table_cell')].forEach(e=>e.classList.remove('active'))
+            [...document.querySelectorAll('.table_cell')].forEach(e => e.classList.remove('active'))
             event.target.classList.add('active')
             item.isselected = true;
             this.selected = item;
@@ -154,13 +160,13 @@ new Vue({
                     let isselected = col.isselected;
                     let background_color = col.background_color;
 
-                    if(isselected){
+                    if (isselected) {
                         this.selected = col;
                     }
 
                     if (!ishide) {
                         const cell = row.insertCell();
-                        cell.textContent = textContent || 0;
+                        cell.textContent = textContent || "-";
 
                         if (colspan > 1 && rowspan == 1) {
                             cell.colSpan = colspan;
@@ -186,7 +192,7 @@ new Vue({
 
                                 if (colspan > 1) {
                                     console.log('in');
-                                    for (let hide_row_cols = 1; hide_row_cols <= colspan-1; hide_row_cols++) {                                        
+                                    for (let hide_row_cols = 1; hide_row_cols <= colspan - 1; hide_row_cols++) {
                                         matrix[i + hide_row][j + hide_row_cols].ishide = true;
                                         matrix[i + hide_row][j + hide_row_cols].value = value;
                                         matrix[i + hide_row][j + hide_row_cols].background_color = background_color;
