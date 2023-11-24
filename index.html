@@ -76,6 +76,10 @@
             <input type="color"  v-model="selected.background_color">
         </div>
         <div>
+            <label for="">rotate deg</label>
+            <input type="number"  v-model="selected.rotate">
+        </div>
+        <div>
             <button @click="add_row">add row</button>
             <button @click="add_cols">add col</button>
         </div>
@@ -89,7 +93,8 @@
                 <td>{{ index + 1 }}</td>
                 <template v-for="(col, cl_index) in row">
                     <td v-if="!col.ishide" :key="cl_index" :rowspan="col.rowspan || 1" :colspan="col.colspan || 1">
-                        <div @click="select(col)" :style="`background-color: ${col.background_color}`" 
+                        <div @click="select(col)" 
+                            :style="`background-color: ${col.background_color}; transform: rotate(${col.rotate}deg);`" 
                             class="table_cell"
                             :class="{active: col.isselected, text_rotate: col.text_rotate}">
                             {{col.value}}

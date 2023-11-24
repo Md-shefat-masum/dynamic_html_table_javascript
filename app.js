@@ -76,6 +76,7 @@ new Vue({
             background_color: '',
             border: '',
             text_rotate: 0,
+            rotate: 0,
         },
     }),
     created: function () {
