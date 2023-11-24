@@ -150,7 +150,12 @@ new Vue({
                     let rowspan = col.rowspan;
                     let ishide = col.ishide;
                     let value = col.value;
+                    let isselected = col.isselected;
                     let background_color = col.background_color;
+
+                    if(isselected){
+                        this.selected = col;
+                    }
 
                     if (!ishide) {
                         const cell = row.insertCell();
