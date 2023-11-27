@@ -42,6 +42,10 @@
                 <input type="number" v-model="selected.rotate">
             </div>
             <div class="item">
+                <label for="">Text wrap</label>
+                <input type="checkbox" class="form-check-input" v-model="selected.text_wrap">
+            </div>
+            <div class="item">
                 <label for="">background color</label>
                 <input type="color" v-model="selected.background_color">
             </div>
@@ -101,9 +105,9 @@
                     <td :class="{highlight: index == selected.row_no}">{{ index + 1 }}</td>
                     <template v-for="(col, cl_index) in row">
                         <td v-if="!col.ishide" :key="cl_index" @click="select(col)" :rowspan="col.rowspan || 1"
-                            :style="`border-width:${col.border!='#000000'?2:1}px;border-color: ${col.border};background-color: ${col.background_color};width: ${col.width}px;height: ${col.height}px;`"
+                            :style="`border-width:${col.border!='#000000'?2:1}px;border-color: ${col.border};background-color: ${col.background_color};width: ${col.width}px;height: ${col.height}px;text-wrap: ${col.text_wrap?'wrap':'nowrap'};`"
                             :class="{active: col.isselected}" :colspan="col.colspan || 1">
-                            <div :style="`transform: rotate(${col.rotate}deg);top: ${col.top}px;left: ${col.left}px; font-size: ${col.font_size}px;`"
+                            <div :style="`transform: rotate(${col.rotate}deg);top: ${col.top}px;left: ${col.left}px; font-size: ${col.font_size}px;width: ${col.width}px;`"
                                 class="table_cell" :class="{text_rotate: col.text_rotate}">
                                 {{col.value}}
                             </div>

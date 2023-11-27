@@ -83,6 +83,7 @@ new Vue({
             top: 0,
             left: 0,
             font_size: 14,
+            text_wrap: false,
         },
     }),
     created: function () {
