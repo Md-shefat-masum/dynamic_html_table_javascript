@@ -61,8 +61,8 @@ new Vue({
     el: "#dtable",
     data: () => ({
         matrix: [],
-        row: 10,
-        col: 10,
+        row: 20,
+        col: 20,
         selected: {},
         table_manipulating: false,
         col_data: {
@@ -72,14 +72,17 @@ new Vue({
             value: '',
             isselected: false,
             isheading: 0,
-            width: 100,
-            background_color: '',
-            border: '',
+            width: 50,
+            height: 24,
+            background_color: '#ffffff',
+            border: '#ffffff',
             text_rotate: 0,
             rotate: 0,
             top: 0,
             left: 0,
             font_size: 14,
+            row_no: 0,
+            col_no: 0,
         },
     }),
     created: function () {
@@ -89,28 +92,39 @@ new Vue({
         } else {
             this.make_table();
         }
+        this.set_cols();
+        
     },
     watch: {
-        matrix: {
+        "matrix": {
             handler: function (v) {
-                if (!this.table_manipulating) {
-                    localStorage.setItem('table', JSON.stringify(v));
-                    this.set_cols();
-                }
+                // if (!this.table_manipulating) {
+                //     this.update_store();
+                // }
+                let that = this;
+                setTimeout(function() {
+                    that.hover_cell();
+                }, 300);
             },
             deep: true,
-        }
+        },
     },
     methods: {
+        update_store: function (matrix = this.matrix) {
+            localStorage.setItem('table', JSON.stringify(matrix));
+        },
         make_table: function () {
             for (let row = 0; row < this.row; row++) {
                 let row_data = []
                 for (let col = 0; col < this.col; col++) {
                     let col_data = this.col_data;
+                    col_data.row_no = row;
+                    col_data.col_no = col;
                     row_data.push({ ...col_data })
                 }
                 this.matrix.push(Array.from(row_data));
             }
+            this.update_store();
         },
         reset: function () {
             this.matrix = [];
@@ -118,15 +132,25 @@ new Vue({
         },
         select: function (item) {
             this.selected.isselected = false;
-            [...document.querySelectorAll('.table_cell')].forEach(e => e.classList.remove('active'))
-            event.target.classList.add('active')
+            [...document.querySelectorAll('td.active')].forEach(e => e.classList.remove('active'))
+            event.currentTarget.classList.add('active');
             item.isselected = true;
             this.selected = item;
             document.getElementById('cell_value').focus();
         },
+        row_span: function () {
+            this.update_store();
+            this.set_cols();
+        },
+        col_span: function () {
+            this.update_store();
+            this.set_cols();
+        },
         unhide: function (row, col) {
             this.matrix[row][col].ishide = false;
             this.matrix[row][col].value = "";
+            this.update_store();
+            this.set_cols();
         },
         add_row: function () {
             let row_data = []
@@ -135,6 +159,9 @@ new Vue({
                 row_data.push({ ...col_data });
             }
             this.matrix.push(Array.from(row_data));
+            this.row++;
+            this.update_store();
+            this.set_cols();
         },
         add_cols: function () {
             this.table_manipulating = true;
@@ -143,12 +170,24 @@ new Vue({
                 this.matrix[i]?.push({ ...col_data })
             }
             this.table_manipulating = false;
+            this.col++;
+            this.update_store();
+            this.set_cols();
         },
         set_cols: function () {
+            // let matrix = JSON.parse(JSON.stringify(this.matrix));
             let matrix = this.matrix;
             const table = document.createElement('table');
             let rows = this.row;
             let columns = this.col;
+
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < columns; j++) {
+                    const col = matrix[i][j];
+                    col.ishide = false;
+                }
+            }
+
             for (let i = 0; i < rows; i++) {
                 const row = table.insertRow();
                 for (let j = 0; j < columns; j++) {
@@ -175,8 +214,9 @@ new Vue({
                             for (let hide_col = 1; hide_col <= colspan - 1; hide_col++) {
                                 if (matrix[i][j + hide_col]) {
                                     matrix[i][j + hide_col].ishide = true;
-                                    matrix[i][j + hide_col].value = value;
-                                    matrix[i][j + hide_col].background_color = background_color;
+                                    console.log(`hiding col: ${i} ${j + hide_col + 1}`);
+                                    // matrix[i][j + hide_col].value = value;
+                                    // matrix[i][j + hide_col].background_color = background_color;
                                 }
                             }
                         }
@@ -188,15 +228,17 @@ new Vue({
 
                             for (let hide_row = 1; hide_row <= rowspan - 1; hide_row++) {
                                 matrix[i + hide_row][j].ishide = true;
-                                matrix[i + hide_row][j].value = value;
-                                matrix[i + hide_row][j].background_color = background_color;
+                                // matrix[i + hide_row][j].value = value;
+                                // matrix[i + hide_row][j].background_color = background_color;
 
                                 if (colspan > 1) {
-                                    console.log('in');
                                     for (let hide_row_cols = 1; hide_row_cols <= colspan - 1; hide_row_cols++) {
+                                        matrix[i][j + hide_row_cols].ishide = true;
+                                    }
+                                    for (let hide_row_cols = 0; hide_row_cols <= colspan - 1; hide_row_cols++) {
                                         matrix[i + hide_row][j + hide_row_cols].ishide = true;
-                                        matrix[i + hide_row][j + hide_row_cols].value = value;
-                                        matrix[i + hide_row][j + hide_row_cols].background_color = background_color;
+                                        // matrix[i + hide_row][j + hide_row_cols].value = value;
+                                        // matrix[i + hide_row][j + hide_row_cols].background_color = background_color;
                                     }
                                 }
                             }
@@ -205,8 +247,44 @@ new Vue({
                     }
                 }
             }
+
+            this.matrix = matrix;
+            this.update_store();
             document.getElementById('matrix').innerHTML = '';
             document.getElementById('matrix').appendChild(table);
+        },
+
+        hover_cell: function () {
+            const cells = document.querySelectorAll('td');
+
+            cells.forEach((cell) => {
+                cell.addEventListener('mouseover', () => {
+                    const row = cell.parentNode;
+                    const rowCells = row.querySelectorAll('td');
+                    const columnIndex = Array.from(rowCells).indexOf(cell);
+
+                    rowCells.forEach((rowCell) => {
+                        rowCell.classList.add('highlight');
+                    });
+
+                    const table = row.parentNode;
+                    const tableRows = table.querySelectorAll('tr');
+
+                    tableRows.forEach((tableRow) => {
+                        const targetCell = tableRow.querySelector(`td:nth-child(${columnIndex + 1})`);
+                        if(targetCell){
+                            targetCell.classList.add('highlight');
+                        }
+                    });
+                });
+
+                cell.addEventListener('mouseout', () => {
+                    const highlightedCells = document.querySelectorAll('.highlight');
+                    highlightedCells.forEach((highlightedCell) => {
+                        highlightedCell.classList.remove('highlight');
+                    });
+                });
+            });
         }
     }
 })

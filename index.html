@@ -5,42 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>dynamic table</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            min-width: 50%;
-            margin: 20px;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        th,
-        td {
-            text-align: center;
-        }
-
-        td div {
-            cursor: pointer;
-            padding: 10px;
-            text-wrap: nowrap;
-            transform-origin: center;
-            position: relative;
-            z-index: 999;
-        }
-
-        .text_rotate {
-            display: inline-block;
-            writing-mode: tb-rl;
-        }
-
-        .active {
-            border: 1px solid red;
-        }
-    </style>
+    <link rel="stylesheet" href="./resource/bootstrap.css">
+    <link rel="stylesheet" href="./resource/style.css">
+    <script src="./resource/bootstrap.js"></script>
 </head>
 
 <body>
@@ -57,70 +24,90 @@
             <label for="">col</label>
             <input type="number" v-model="col">
         </div> -->
-        <div>
-            <button @click="reset()">reset</button>
+        <div class="tools">
+            <div class="item">
+                <label for="">colspan</label>
+                <input type="number" @change="col_span" @keyup="col_span" v-model="selected.colspan">
+            </div>
+            <div class="item">
+                <label for="">rowspan</label>
+                <input type="number" @change="row_span" @keyup="row_span" v-model="selected.rowspan">
+            </div>
+            <div class="item">
+                <label for="">rotate</label>
+                <input type="checkbox" class="form-check-input" v-model="selected.text_rotate">
+            </div>
+            <div class="item">
+                <label for="">rotate deg</label>
+                <input type="number" v-model="selected.rotate">
+            </div>
+            <div class="item">
+                <label for="">background color</label>
+                <input type="color" v-model="selected.background_color">
+            </div>
+
+            <div class="item">
+                <label for="">top</label>
+                <input type="number" v-model="selected.top">
+            </div>
+            <div class="item">
+                <label for="">left</label>
+                <input type="number" v-model="selected.left">
+            </div>
+            <div class="item">
+                <label for="">font size</label>
+                <input type="number" v-model="selected.font_size">
+            </div>
+            <div class="item">
+                <label for="">width</label>
+                <input type="number" v-model="selected.width">
+            </div>
+            <div class="item">
+                <label for="">height</label>
+                <input type="number" v-model="selected.height">
+            </div>
+            <div class="item">
+                <button @click="add_row">add row</button>
+                <button @click="add_cols">add col</button>
+                <button @click="reset()">reset</button>
+            </div>
         </div>
-        <div>
-            <label for="">colspan</label>
-            <input type="number" v-model="selected.colspan">
-        </div>
-        <div>
-            <label for="">rowspan</label>
-            <input type="number" v-model="selected.rowspan">
-        </div>
-        <div>
-            <label for="">value</label>
-            <input type="text" id="cell_value" v-model="selected.value">
-        </div>
-        <div>
-            <label for="">rotate</label>
-            <input type="checkbox" v-model="selected.text_rotate">
-        </div>
-        <div>
-            <label for="">background_color</label>
-            <input type="color" v-model="selected.background_color">
-        </div>
-        <div>
-            <label for="">rotate deg</label>
-            <input type="number" v-model="selected.rotate">
-        </div>
-        <div>
-            <label for="">top</label>
-            <input type="number" v-model="selected.top">
-        </div>
-        <div>
-            <label for="">left</label>
-            <input type="number" v-model="selected.left">
-        </div>
-        <div>
-            <label for="">font_size</label>
-            <input type="number" v-model="selected.font_size">
-        </div>
-        <div>
-            <button @click="add_row">add row</button>
-            <button @click="add_cols">add col</button>
-        </div>
-        <table>
-            <tr>
-                <td v-for="c in matrix[0].length+1">
-                    <div>{{ c }}</div>
-                </td>
-            </tr>
-            <tr v-for="(row, index) in matrix" :key="index">
-                <td>{{ index + 1 }}</td>
-                <template v-for="(col, cl_index) in row">
-                    <td v-if="!col.ishide" :key="cl_index" :rowspan="col.rowspan || 1" :colspan="col.colspan || 1">
-                        <div @click="select(col)"
-                            :style="`background-color: ${col.background_color}; transform: rotate(${col.rotate}deg);top: ${col.top}px;left: ${col.left}px; font-size: ${col.font_size}px;`"
-                            class="table_cell" :class="{active: col.isselected, text_rotate: col.text_rotate}">
-                            {{col.value}}
+
+        <div class="sheet_table  table-responsive">
+            <table>
+                <tr>
+                    <td>
+                        <div>
+                            {{(selected.row_no +1 || 0)}}:
+                            {{(selected.col_no +1 || 0)}}
                         </div>
                     </td>
-                </template>
-            </tr>
-        </table>
+                    <td :colspan="matrix[0].length">
+                        <input id="cell_value" v-model="selected.value" type="text" class="w-100 border-0">
+                    </td>
+                </tr>
+                <tr>
+                    <td v-for="c in matrix[0].length+1">
+                        <div v-if="c-1 > 0">{{ c - 1 }}</div>
+                    </td>
+                </tr>
+                <tr v-for="(row, index) in matrix" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <template v-for="(col, cl_index) in row">
+                        <td v-if="!col.ishide" :key="cl_index" @click="select(col)" :rowspan="col.rowspan || 1"
+                            :style="`background-color: ${col.background_color};width: ${col.width}px;height: ${col.height}px;`"
+                            :class="{active: col.isselected}" :colspan="col.colspan || 1">
+                            <div :style="`transform: rotate(${col.rotate}deg);top: ${col.top}px;left: ${col.left}px; font-size: ${col.font_size}px;`"
+                                class="table_cell" :class="{text_rotate: col.text_rotate}">
+                                {{col.value}}
+                            </div>
+                        </td>
+                    </template>
+                </tr>
+            </table>
+        </div>
         <br>
-        <table>
+        <table class="d-none">
             <tr v-for="(trow, trow_index) in matrix" :key="trow_index">
                 <template v-for="(tcol, cl_index) in trow">
                     <td :key="cl_index">
@@ -135,8 +122,8 @@
             </tr>
         </table>
     </div>
+    <div id="matrix" class="d-none"></div>
 
-    <div id="matrix"></div>
     <script src="./vue.js"></script>
     <script src="./app.js"></script>
 </body>

@@ -1,0 +1,107 @@
+table {
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+th,
+td {
+  text-align: center;
+  min-height: 20px;
+  min-width: 50px;
+}
+
+.highlight {
+  background-color: rgb(236, 236, 236) !important;
+}
+
+td div {
+  cursor: pointer;
+  padding: 5px;
+  text-wrap: nowrap;
+  transform-origin: center;
+  position: relative;
+  z-index: 999;
+}
+
+.text_rotate {
+  display: inline-block;
+  writing-mode: tb-rl;
+}
+
+.active {
+  border: 2px solid red;
+}
+
+.sheet_table {
+  margin: 10px;
+}
+.sheet_table table tr td {
+  min-width: 50px;
+  padding: 0;
+  vertical-align: middle;
+}
+.sheet_table table tr td div {
+  min-height: 24px;
+  line-height: 14px;
+}
+
+#cell_value {
+  outline: 0;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(202, 223, 237);
+  padding: 15px 20px;
+  margin: 10px;
+  border-radius: 4px;
+  gap: 10px;
+}
+.tools .item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: first baseline;
+  text-align: left;
+}
+.tools .item label {
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 12px;
+  line-height: 21px;
+}
+.tools .item input {
+  width: 50px;
+  text-align: center;
+  height: 24px;
+  font-size: 12px;
+  line-height: 22px;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 4px;
+  outline: 0;
+}
+.tools .item input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+}
+.tools .item input:checked {
+  background-color: #4a6a5a;
+  border: 1px solid #4a6a5a;
+}
+.tools .item button {
+  background-color: #5e7692;
+  border: 0;
+  text-transform: capitalize;
+  color: white;
+  font-size: 12px;
+  line-height: 21px;
+}
+
+/*# sourceMappingURL=style.css.map */
