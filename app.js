@@ -128,6 +128,7 @@ new Vue({
         reset: function () {
             this.matrix = [];
             this.make_table();
+            this.update_store();
         },
         select: function (item) {
             this.selected.isselected = false;
