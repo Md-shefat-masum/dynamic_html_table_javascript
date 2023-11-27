@@ -77,19 +77,21 @@
             </div>
         </div>
 
-        <div class="sheet_table  table-responsive">
-            <table>
+        <div class="sheet_table table-responsive">
+            <table class="w-100 sheet_input">
                 <tr>
-                    <td>
+                    <td style="width: 50px;">
                         <div>
                             {{(selected.row_no +1 || 0)}}:
                             {{(selected.col_no +1 || 0)}}
                         </div>
                     </td>
-                    <td :colspan="matrix[0].length">
+                    <td>
                         <input id="cell_value" v-model="selected.value" type="text" class="w-100 border-0">
                     </td>
                 </tr>
+            <table>
+            <table>
                 <tr>
                     <td v-for="c in matrix[0].length+1" :class="{highlight: c-1 == selected.col_no +1}">
                         <div v-if="c-1 > 0">{{ c - 1 }}</div>
@@ -133,3 +135,4 @@
 </body>
 
 </html>
+
