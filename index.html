@@ -45,6 +45,10 @@
                 <label for="">background color</label>
                 <input type="color" v-model="selected.background_color">
             </div>
+            <div class="item">
+                <label for="">border color</label>
+                <input type="color" v-model="selected.border">
+            </div>
 
             <div class="item">
                 <label for="">top</label>
@@ -87,15 +91,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td v-for="c in matrix[0].length+1">
+                    <td v-for="c in matrix[0].length+1" :class="{highlight: c-1 == selected.col_no +1}">
                         <div v-if="c-1 > 0">{{ c - 1 }}</div>
                     </td>
                 </tr>
                 <tr v-for="(row, index) in matrix" :key="index">
-                    <td>{{ index + 1 }}</td>
+                    <td :class="{highlight: index == selected.row_no}">{{ index + 1 }}</td>
                     <template v-for="(col, cl_index) in row">
                         <td v-if="!col.ishide" :key="cl_index" @click="select(col)" :rowspan="col.rowspan || 1"
-                            :style="`background-color: ${col.background_color};width: ${col.width}px;height: ${col.height}px;`"
+                            :style="`border-width:${col.border!='#000000'?2:1}px;border-color: ${col.border};background-color: ${col.background_color};width: ${col.width}px;height: ${col.height}px;`"
                             :class="{active: col.isselected}" :colspan="col.colspan || 1">
                             <div :style="`transform: rotate(${col.rotate}deg);top: ${col.top}px;left: ${col.left}px; font-size: ${col.font_size}px;`"
                                 class="table_cell" :class="{text_rotate: col.text_rotate}">

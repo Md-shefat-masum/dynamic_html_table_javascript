@@ -68,21 +68,21 @@ new Vue({
         col_data: {
             colspan: 1,
             rowspan: 1,
+            row_no: 0,
+            col_no: 0,
             ishide: 0,
             value: '',
-            isselected: false,
             isheading: 0,
-            width: 50,
-            height: 24,
+            isselected: false,
             background_color: '#ffffff',
-            border: '#ffffff',
+            border: '#000000',
             text_rotate: 0,
             rotate: 0,
+            width: 50,
+            height: 24,
             top: 0,
             left: 0,
             font_size: 14,
-            row_no: 0,
-            col_no: 0,
         },
     }),
     created: function () {
@@ -93,7 +93,6 @@ new Vue({
             this.make_table();
         }
         this.set_cols();
-        
     },
     watch: {
         "matrix": {
@@ -103,7 +102,7 @@ new Vue({
                 // }
                 let that = this;
                 setTimeout(function() {
-                    that.hover_cell();
+                    
                 }, 300);
             },
             deep: true,
@@ -137,6 +136,7 @@ new Vue({
             item.isselected = true;
             this.selected = item;
             document.getElementById('cell_value').focus();
+            this.update_store();
         },
         row_span: function () {
             this.update_store();
@@ -254,37 +254,5 @@ new Vue({
             document.getElementById('matrix').appendChild(table);
         },
 
-        hover_cell: function () {
-            const cells = document.querySelectorAll('td');
-
-            cells.forEach((cell) => {
-                cell.addEventListener('mouseover', () => {
-                    const row = cell.parentNode;
-                    const rowCells = row.querySelectorAll('td');
-                    const columnIndex = Array.from(rowCells).indexOf(cell);
-
-                    rowCells.forEach((rowCell) => {
-                        rowCell.classList.add('highlight');
-                    });
-
-                    const table = row.parentNode;
-                    const tableRows = table.querySelectorAll('tr');
-
-                    tableRows.forEach((tableRow) => {
-                        const targetCell = tableRow.querySelector(`td:nth-child(${columnIndex + 1})`);
-                        if(targetCell){
-                            targetCell.classList.add('highlight');
-                        }
-                    });
-                });
-
-                cell.addEventListener('mouseout', () => {
-                    const highlightedCells = document.querySelectorAll('.highlight');
-                    highlightedCells.forEach((highlightedCell) => {
-                        highlightedCell.classList.remove('highlight');
-                    });
-                });
-            });
-        }
     }
 })

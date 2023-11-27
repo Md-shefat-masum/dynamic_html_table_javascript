@@ -16,7 +16,7 @@ td {
 }
 
 .highlight {
-  background-color: rgb(236, 236, 236) !important;
+  background-color: rgb(208, 206, 206);
 }
 
 td div {
@@ -34,7 +34,9 @@ td div {
 }
 
 .active {
-  border: 2px solid red;
+  border-width: 2px !important;
+  border-style: solid;
+  border-color: tomato !important;
 }
 
 .sheet_table {
