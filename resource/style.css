@@ -42,10 +42,13 @@ td div {
   position: sticky;
   left: 0;
   top: 0;
+  background: white;
+  z-index: 9999;
 }
 
 .sheet_table {
   margin: 10px;
+  max-height: calc(100vh - 172px);
 }
 .sheet_table table tr td {
   min-width: 50px;
